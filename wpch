@@ -1,0 +1,5 @@
+#!/bin/sh
+export DISPLAY=:0
+nitrogen --head=0 --random --set-zoom-fill /home/breezeshane/AppData/Wallpapers/Horizontal > /dev/null 2>&1
+nitrogen --head=1 --random --set-zoom-fill /home/breezeshane/AppData/Wallpapers/Horizontal > /dev/null 2>&1
+nitrogen --head=2 --random --set-zoom-fill /home/breezeshane/AppData/Wallpapers/Rotated > /dev/null 2>&1

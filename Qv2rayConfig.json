@@ -1,0 +1,29 @@
+{
+    "author": "Breeze Shane",
+    "description": "Personal Settings.",
+    "domainMatcher": "mph",
+    "domainStrategy": "AsIs",
+    "domains": {
+        "direct": [
+            "domain:kexie.space",
+            "domain:gitee.io",
+            "domain:educoder.net",
+            "domain:ketangpai.com",
+            "domain:yuketang.cn",
+            "domain:zhihu.com",
+            "domain:bilibili.com",
+            "domain:zhihuishu.com",
+            "domain:itest.guet.edu.cn",
+            "domain:airportal.cn",
+            "domain:ke.qq.com",
+            "domain:u.unipus.cn",
+            "domain:sunning.fit"
+        ]
+    },
+    "ips": {
+        "direct": [
+            "192.168.193.200"
+        ]
+    },
+    "name": "BreezeShaneSurfingOnline"
+}
