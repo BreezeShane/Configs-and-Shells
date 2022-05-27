@@ -37,7 +37,7 @@ modi: "window,drun,ssh,run,combi";
 /*  parse-hosts: false;*/
 /*  parse-known-hosts: true;*/
 /*  combi-modi: "window,run";*/
-combi-modi: "window,drun,ssh,run";
+combi-modi: "drun,ssh,run";
 /*  matching: "normal";*/
 /*  tokenize: true;*/
 /*  m: "-5";*/
