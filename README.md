@@ -6,6 +6,7 @@ Here the repository stores the configurations and shells along with using Linux(
 fstab => /etc/fstab
 rc.lua => $HOME/.config/awesome/rc.lua
 .Xresources => $HOME/.Xresources
+config.rasi => $HOME/.config/rofi/config.rasi
 ```
 
-The left are custom scripts and configurations, put it where you like. :)
+And The left are custom scripts and configurations, put it where you like. :)
