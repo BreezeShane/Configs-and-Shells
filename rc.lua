@@ -309,6 +309,12 @@ root.buttons(my_table.join(
 globalkeys = my_table.join(
 
     -- {{{ Personal keybindings
+    awful.key({"Control", modkey, "Shift" }, "l", function () awful.util.spawn_with_shell( "sh ~/Scripts/screen-lock.sh" ) end,
+    	{ description = "Screen lock", group = "global keys" }),
+    awful.key({"Control", altkey, "Shift" }, "w", function () awful.util.spawn_with_shell( "sh ~/Scripts/wpch" ) end,
+    	{ description = "Change Wallpapers", group = "global keys" }),
+    awful.key({"Control", modkey, "Shift" }, "h", function () awful.util.spawn("systemctl hibernate") end,
+    	{description = "Hibernate", group = "global keys"}),
     awful.key({ modkey }, "w", function () awful.util.spawn( browser1 ) end,
         {description = browser1, group = "function keys"}),
     -- flameshot
@@ -348,9 +354,9 @@ globalkeys = my_table.join(
         {description = mailclient , group = "function keys" }),
     awful.key({ modkey }, "F10", function () awful.util.spawn( mediaplayer ) end,
         {description = mediaplayer , group = "function keys" }),
-    awful.key({ modkey }, "F11", function () awful.util.spawn( "rofi -theme-str 'window {width: 100%;height: 100%;}' -show drun" ) end,
+    awful.key({ modkey }, "F11", function () awful.util.spawn( "rofi -theme-str 'window {width: 100%;height: 100%;}' -show combi" ) end,
         {description = "rofi fullscreen" , group = "function keys" }),
-    awful.key({ modkey }, "F12", function () awful.util.spawn( "rofi -show drun" ) end,
+    awful.key({ modkey }, "F12", function () awful.util.spawn( "rofi -show combi" ) end,
         {description = "rofi" , group = "function keys" }),
 
     -- super + ...
@@ -775,7 +781,7 @@ globalkeys = my_table.join(
               {description = "show the menubar", group = "super"})
     --]]
 
-    awful.key({ altkey }, "x",
+    awful.key({ altkey, "Shift" }, "x",
               function ()
                   awful.prompt.run {
                     prompt       = "Run Lua code: ",
@@ -1159,6 +1165,8 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Autostart applications
 awful.spawn.with_shell("~/.config/awesome/autostart.sh")
 awful.spawn.with_shell("picom -b --config  $HOME/.config/awesome/picom.conf")
+awful.util.spawn_with_shell(string.format("nitrogen --head=0 --random --set-zoom-fill /home/breezeshane/AppData/Wallpapers"))
+
 
 -- Autorun programs
 autorun = true
@@ -1166,7 +1174,7 @@ autorunApps =
 {
 	"fcitx5",
 	"qv2ray",
-	"icalingua",
+--	"icalingua",
 	"flameshot",
 	"copyq",
 }
@@ -1176,3 +1184,35 @@ if autorun then
 		awful.util.spawn_with_shell(autorunApps[app])
 	end
 end
+
+-- {{{ Tag Wallpaper
+--local path_for_wp_normal = os.getenv("HOME") .."/.wallpapers/Normal/"
+--local path_for_wp_turned = os.getenv("HOME") .."/.wallpapers/Turned/"
+--local num_tabs = 10
+
+--awful.spawn.with_shell(string.format("nitrogen --head=1 --random --set-zoom-fill %s", path_for_wp_normal))
+
+
+
+-- for s = 1, screen.count() do
+    --if s.geometry.width >= s.geometry.height then
+	--for t = 1, num_tabs do
+		--tags[s][t]:connect_signal("property::selected", function (tag)
+        	-- And if selected
+		--if not tag.selected then return end
+        	-- Set wallpaper
+--	    	os.execute("nitrogen --head="..s.." --random --set-zoom-fill "..path_for_wp_normal.." > ~/logfile")
+    		--end)
+    	--end
+    --else
+	--for t = 1, num_tabs do
+		--tags[s][t]:connect_signal("property::selected", function (tag)
+        	-- And if selected
+		--if not tag.selected then return end
+            	-- Set wallpaper
+		--os.execute("nitrogen --head="..s.." --random --set-zoom-fill"..path_for_wp_turned)
+		--end)
+    	--end
+    --end
+--end
+-- }}}
