@@ -45,26 +45,10 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
+beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
--- terminal = "alacritty"
-gears.timer {
-    timeout   = 24 * 3600,
-    call_now  = true,
-    autostart = true,
-    callback  = function()
-        terminal = (function()
-            date_num_for_terminal = tonumber(os.date("%d")) % 3
-            local switch_terminal = {
-                [0] = "alacritty",
-                [1] = "kitty",
-                [2] = "terminology"
-            }
-            return switch_terminal[date_num_for_terminal]
-        end)()
-    end
-}
+terminal = "xterm"
 editor = os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -73,9 +57,7 @@ editor_cmd = terminal .. " -e " .. editor
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-ctrlkey = "Control"
 modkey = "Mod4"
-altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -125,67 +107,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = {
-    format       = "%Y/%m/%d %a %H:%M:%S",
-    refresh      = 1,
-    widget       = wibox.widget.textclock
-}
-
--- Create a widget and update its content using the output of a shell
--- command every 10 seconds:
-local mybatterybar = wibox.widget {
-    {
-        id           = "mypb",
-        min_value    = 0,
-        max_value    = 100,
-        value        = 0,
-        forced_height = 20,
-        forced_width  = 50,
-        shape         = gears.shape.rounded_bar,
-        border_color = "#FFFFFF",
-        color        = "#00e09e",
-        background_color    = "#75878a",
-        opacity      = 0.6,
-        widget       = wibox.widget.progressbar,
-    },
-    {
-        id           = "mytb",
-        text         = "100%",
-        font         = "Source Code Pro Black",
-        align        = 'center',
-        valign       = 'center',
-        font_height = 30,
-        widget       = wibox.widget.textbox,
-    },
-    layout      = wibox.layout.stack,
-    set_battery = function(self, val)
-        battery_capacity = tonumber(val);
-        self.mytb.text  = battery_capacity.."%"
-        self.mypb.value = battery_capacity
-        
-        if (battery_capacity >= 60) then
-            self.mypb.color = "#00e09e";
-        elseif (battery_capacity >= 30) then
-            self.mypb.color = "#eaff56";
-        else 
-            self.mypb.color = "#ff2121";
-        end
-    end,
-}
-
-gears.timer {
-    timeout   = 60,
-    call_now  = true,
-    autostart = true,
-    callback  = function()
-        awful.spawn.easy_async(
-            {"sh", "-c", "cat /sys/class/power_supply/BAT1/capacity"},
-            function(battery_capacity)
-                mybatterybar.battery = battery_capacity;
-            end
-        )
-    end
-}
+mytextclock = wibox.widget.textclock()
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -247,7 +169,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "➊", "➋", "➌", "➍", "➎", "➏", "➐", "➑", "➒" }, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -290,7 +212,6 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
             wibox.widget.systray(),
-            mybatterybar,
             mytextclock,
             s.mylayoutbox,
         },
@@ -403,47 +324,9 @@ globalkeys = gears.table.join(
                   }
               end,
               {description = "lua execute prompt", group = "awesome"}),
-    -- Custom
-    awful.key({ altkey }, " ", function () awful.util.spawn( "rofi -show combi" ) end,
-        {description = "rofi" , group = "Applications" }),
-    awful.key({ modkey }, "e", function () awful.util.spawn( "caja" ) end,
-        {description = "Caja File Explorer" , group = "Applications" }),
-        -- Quick Start
-        awful.key({ modkey }, "F1", function () awful.util.spawn( "google-chrome-stable" ) end,
-            {description = "Google Chrome" , group = "Applications" }),
-        awful.key({ modkey }, "F2", function () awful.util.spawn( "icalingua" ) end,
-            {description = "QQ" , group = "Applications" }),
-        awful.key({ modkey }, "F3", function () awful.util.spawn( "telegram-desktop" ) end,
-            {description = "Telegram" , group = "Applications" }),
-        awful.key({ modkey }, "F11", function () awful.util.spawn( "cfw" ) end,
-            {description = "Proxy Tool" , group = "Applications" }),
-        awful.key({ modkey }, "F12", function () awful.util.spawn( "/opt/appimages/listen1.AppImage" ) end,
-            {description = "YesPlayMusic" , group = "Applications" }),
-    awful.key({ }, "F1", function () awful.util.spawn( "flameshot gui" ) end,
-        {description = "Flameshot" , group = "Applications" }),
-    awful.key({ ctrlkey, altkey, "Shift" }, "F1", function () awful.util.spawn( "autorandr -l 3Scr" ) end,
-        {description = "Triple Screens Display Mode" , group = "Functionalities" }),
-    awful.key({ ctrlkey, altkey, "Shift" }, "F2", function () awful.util.spawn( "autorandr -l Portable" ) end,
-        {description = "Single Screen Display Mode" , group = "Functionalities" }),
-    awful.key({ ctrlkey, altkey, "Shift" }, "F3", function () awful.util.spawn( "autorandr -l 2Scr" ) end,
-        {description = "Single Screen Display Mode" , group = "Functionalities" }),
-    awful.key({ ctrlkey, altkey, "Shift" }, "F12", function () awful.util.spawn( "arandr" ) end,
-        {description = "Custom Screen Display Mode" , group = "Functionalities" }),
-    awful.key({ ctrlkey, altkey, "Shift" }, "H", function () awful.util.spawn( "systemctl hibernate" ) end,
-        {description = "Hibernate" , group = "hotkeys" }),
-    awful.key({ ctrlkey, altkey, "Shift" }, "W", function () awful.util.spawn_with_shell( ". /home/breezeshane/.config/awesome/wpch.sh" ) end,
-        {description = "Change Wallpapers" , group = "hotkeys" }),
-    awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end,
-        {description = "+10%", group = "hotkeys"}),
-    awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 10") end,
-        {description = "-10%", group = "hotkeys"}),
-
-    
-
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
-    
 )
 
 clientkeys = gears.table.join(
@@ -487,10 +370,7 @@ clientkeys = gears.table.join(
             c.maximized_horizontal = not c.maximized_horizontal
             c:raise()
         end ,
-        {description = "(un)maximize horizontally", group = "client"}),
-    -- Custom
-    awful.key({ modkey, }, "q", function (c) c:kill() end,
-        {description = "close", group = "client"})
+        {description = "(un)maximize horizontally", group = "client"})
 )
 
 -- Bind all key numbers to tags.
@@ -682,31 +562,3 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
--- Autorun programs
-autorun = true -- false
-autorunApps =
-{
-    "cfw",
-    "flameshot",
-    -- "icalingua",
-    -- "telegram-desktop",
-}
-
-if autorun then
-	for app = 1, #autorunApps do
-		awful.util.spawn_with_shell(autorunApps[app])
-	end
-end
-
--- Auto load Screen Display Mode
-
--- naughty.notify({ preset = naughty.config.presets.critical,
--- title = "The number of current screens is",
--- text = tostring(screen:count()) })
-
--- if screen:count() < 3 then
---     awful.util.spawn_with_shell("autorandr -l Portable")
--- else
---     awful.util.spawn_with_shell("autorandr -l 3Scr")
--- end
